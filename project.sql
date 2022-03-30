@@ -8,7 +8,7 @@ Tu Nguyen
 Alexis Webster
 */
 < The SQL/DDL code that creates your schema >
-In the DDL, every IC must have a unique name; e.g. IC5, IC10, IC15, etc.
+--In the DDL, every IC must have a unique name; e.g. IC5, IC10, IC15, etc.
 --
 SET FEEDBACK OFF
 < The INSERT statements that populate the tables>
@@ -19,7 +19,8 @@ COMMIT;
 --
 < One query (per table) of the form: SELECT * FROM table; in order to display your database >
 --
-< The SQL queries>. Include the following for each query:
+< The SQL queries>
+--Include the following for each query:
 --	− A comment line stating the query number and the feature(s) it demonstrates
 --(e.g. -- Q25 – correlated subquery).
 --	− A comment line stating the query in English.
@@ -33,4 +34,3 @@ COMMIT;
 COMMIT;
 --
 SPOOL OFF
-
