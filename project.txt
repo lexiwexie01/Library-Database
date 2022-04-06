@@ -1,0 +1,165 @@
+SQL> SET ECHO ON
+SQL> /*
+SQL> CIS 353 - Database Design Project
+SQL> Kyle Casey
+SQL> Matthew Newhouse
+SQL> Tu Nguyen
+SQL> Alexis Webster
+SQL> */
+SQL> --< The SQL/DDL code that creates your schema >
+SQL> --In the DDL, every IC must have a unique name; e.g. IC5, IC10, IC15, etc.
+SQL> --
+SQL> SET FEEDBACK OFF
+SQL> --< The INSERT statements that populate the tables>
+SQL> CREATE TABLE Book (
+  2  ISBN    INTEGER,
+  3  publisher	 CHAR(20)    NOT NULL,
+  4  title   CHAR(20)	 NOT NULL,
+  5  retail_cost     FLOAT NOT NULL,
+  6  --
+  7  CONSTRAINT bookIC1 PRIMARY KEY (ISBN)
+  8  );
+SQL> --
+SQL> CREATE TABLE Librarian (
+  2  ssn     INTEGER,
+  3  librarian_name  CHAR(20)	NOT NULL,
+  4  date_of_hire    DATE    NOT NULL,
+  5  mentor_ssn      INTEGER,
+  6  --
+  7  CONSTRAINT lIC1 PRIMARY KEY (ssn)
+  8  );
+SQL> --
+SQL> CREATE TABLE LibraryCard (
+  2  card_number     INTEGER,
+  3  customer_name   CHAR(20)	NOT NULL,
+  4  expiration_date   DATE   NOT NULL,
+  5  zip_code	     INTEGER   NOT NULL,
+  6  --
+  7  CONSTRAINT lcIC1 PRIMARY KEY (card_number)
+  8  );
+SQL> --
+SQL> CREATE TABLE ReadingGroup (
+  2  id      INTEGER,
+  3  genre   CHAR(20) NOT NULL,
+  4  group_name      CHAR(20)  NOT NULL,
+  5  --
+  6  CONSTRAINT readIC1 PRIMARY KEY (id)
+  7  );
+SQL> --
+SQL> CREATE TABLE Transaction (
+  2  transaction_number   INTEGER,
+  3  order_date      DATE   NOT NULL,
+  4  return_date     DATE   NOT NULL,
+  5  due_date	     DATE   NOT NULL,
+  6  penalty INTEGER,
+  7  librarian_ssn   INTEGER NOT NULL,
+  8  c_number	     INTEGER NOT NULL,
+  9  --
+ 10  CONSTRAINT tIC1 PRIMARY KEY (transaction_number)
+ 11  );
+SQL> --
+SQL> CREATE TABLE BookCopy (
+  2  copy_number     INTEGER,
+  3  isbn    INTEGER,
+  4  condition	     CHAR(20) NOT NULL,
+  5  date_received   DATE NOT NULL,
+  6  tnumber INTEGER NOT NULL,
+  7  --
+  8  CONSTRAINT bcIC1 PRIMARY KEY (copy_number, isbn)
+  9  );
+SQL> --
+SQL> CREATE TABLE Authors (
+  2  a_isbn  INTEGER,
+  3  author  CHAR(20) NOT NULL,
+  4  --
+  5  CONSTRAINT aIC1 PRIMARY KEY (a_isbn, author)
+  6  );
+SQL> --
+SQL> CREATE TABLE Joins (
+  2  groupid   INTEGER,
+  3  card_num	INTEGER,
+  4  date_of_join    DATE    NOT NULL,
+  5  --
+  6  CONSTRAINT jIC1 PRIMARY KEY (groupid, card_num)
+  7  );
+SQL> --Important: Keep the number of rows in each table small enough so that the results of your
+SQL> --queries can be verified by hand. See the Sailors database as an example.
+SQL> SET FEEDBACK ON
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> --
+SQL> --< One query (per table) of the form: SELECT * FROM table; in order to display your database >
+SQL> --
+SQL> < The SQL queries>
+SP2-0734: unknown command beginning "< The SQL ..." - rest of line ignored.
+SQL> --Include the following for each query:
+SQL> --      − A comment line stating the query number and the feature(s) it demonstrates
+SQL> --(e.g. -- Q25 – correlated subquery).
+SQL> --      − A comment line stating the query in English.
+SQL> --      − The SQL code for the query.
+SQL> --
+SQL> --< The insert/delete/update statements to test the enforcement of ICs >
+SQL> INSERT INTO Book VALUES (1234567891234, 'Disney', 'Disney Book', 10.50);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Librarian VALUES (123456789, 'Steven',
+  2  	     TO_DATE('10/14/93', 'MM/DD/YY'), 987654321 );
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO LibraryCard VALUES (54321, 'Joseph',
+  2  	     TO_DATE('10/25/21', 'MM/DD/YY'), 49221);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO ReadingGroup VALUES (4321, 'Fantasy', 'Fans of Fantasy');
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Transaction VALUES (7654321,
+  2  	     TO_DATE('11/10/20', 'MM/DD/YY'),
+  3  	     TO_DATE('12/24/20', 'MM/DD/YY'),
+  4  	     TO_DATE('12/24/20', 'MM/DD/YY'),
+  5  	     0,123456789,54321);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO BookCopy VALUES (10,1234567891234,'Good',
+  2  	     TO_DATE('01/05/99', 'MM/DD/YY'),
+  3  	     7654321);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Authors VALUES (1234567891234, 'John Doe');
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Joins VALUES (4321, 54321,
+  2  	     TO_DATE('01/07/00', 'MM/DD/YY'));
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> /*Include the following items for every IC that you test (Important: see the next section titled
+SQL> “Submit a final report” regarding which ICs you need to test).*/
+SQL> 	     --− A comment line stating: Testing: < IC name>
+SQL> 	     --− A SQL INSERT, DELETE, or UPDATE that will test the IC.
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> --
+SQL> SPOOL OFF
