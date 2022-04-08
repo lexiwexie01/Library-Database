@@ -122,6 +122,32 @@ INSERT INTO Authors VALUES (1234567891234, 'John Doe');
 --
 INSERT INTO Joins VALUES (4321, 54321,
 	TO_DATE('01/07/00', 'MM/DD/YY'));
+--
+--Next set
+INSERT INTO Book VALUES (9876543212022, 'Scholastic', 'The Hunger Games', 15.99);
+--
+INSERT INTO Librarian VALUES (246710121, 'Leah', 
+	TO_DATE('3/22/90', 'MM/DD/YY'),  101142222);
+--
+INSERT INTO LibraryCard VALUES (76543, 'Albert', 
+	TO_DATE('06/30/20', 'MM/DD/YY'), 49221);
+--
+INSERT INTO ReadingGroup VALUES (9876, 'True Crime Non-Fiction', 'Literary Detectives');
+--
+INSERT INTO Transaction VALUES (12345,
+	TO_DATE('02/02/22', 'MM/DD/YY'), 
+	TO_DATE('02/16/22', 'MM/DD/YY'),
+	TO_DATE('02/15/22', 'MM/DD/YY'),
+	0,246710121,76543);
+--
+INSERT INTO BookCopy VALUES (1,9876543212022,'Poor',
+	TO_DATE('10/22/12', 'MM/DD/YY'),
+	12345);
+--
+INSERT INTO Authors VALUES (9876543212022, 'Suzanne Collins');
+--
+INSERT INTO Joins VALUES (9876, 76543,
+	TO_DATE('05/15/21', 'MM/DD/YY'));
 COMMIT;
 /*Include the following items for every IC that you test (Important: see the next section titled
 “Submit a final report” regarding which ICs you need to test).*/
