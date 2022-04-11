@@ -148,6 +148,24 @@ INSERT INTO Authors VALUES (9876543212022, 'Suzanne Collins');
 --
 INSERT INTO Joins VALUES (9876, 76543,
 	TO_DATE('05/15/21', 'MM/DD/YY'));
+--Next set
+INSERT INTO Book VALUES (9780316726610, 'Hyperion', 'The Five People You Meet in Heaven', 7.99);
+INSERT INTO Librarian VALUES (748201099, 'Wean', 
+	TO_DATE('11/19/18', 'MM/DD/YY'), 246710121);
+INSERT INTO LibraryCard VALUES (76528, 'Sam',
+	TO_DATE('12/24/23' 'MM/DD/YY'), 49420);
+INSERT INTO ReadingGroup VALUES (1008, 'Religious fiction', 'Our philosophy');
+INSERT INTO Transaction VALUES (12347,
+	TO_DATE('11/13/21', 'MM/DD/YY'), 
+	TO_DATE('11/20/21', 'MM/DD/YY'),
+	TO_DATE('11/27/21', 'MM/DD/YY'),
+	0, 748201099, 76528);
+INSERT INTO BookCopy VALUES (5, 9780316726610, 'Good',
+	TO_DATE('02/04/98', 'MM/DD/YY'),
+	12347);
+INSERT INTO Authors VALUES (9876543212022, 'Mitch Albom');
+INSERT INTO Joins VALUES (42356, 76528,,
+	TO_DATE('01/08/20', 'MM/DD/YY'));
 COMMIT;
 /*Include the following items for every IC that you test (Important: see the next section titled
 “Submit a final report” regarding which ICs you need to test).*/
