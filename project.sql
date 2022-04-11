@@ -68,6 +68,8 @@ tnumber	INTEGER NOT NULL,
 --
 CONSTRAINT bcIC1 PRIMARY KEY (copy_number, isbn)
 );
+CONSTRAINT bcIC2 CHECK (condition IN ('New', 'Good', 'Bad')),
+
 --
 CREATE TABLE Authors (
 a_isbn	INTEGER,
