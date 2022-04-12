@@ -55,8 +55,18 @@ SQL> CREATE TABLE Transaction (
   7  librarian_ssn   INTEGER NOT NULL,
   8  c_number	     INTEGER NOT NULL,
   9  --
- 10  CONSTRAINT tIC1 PRIMARY KEY (transaction_number)
- 11  );
+ 10  CONSTRAINT tIC1 PRIMARY KEY (transaction_number),
+ 11  --Fulfillment Constraint
+ 12  CONSTRAINT tIC2 FORIEGN KEY (librarian_ssn)
+ 13  REFERENCES Librarian(ssn)
+ 14  );
+CONSTRAINT tIC2 FORIEGN KEY (librarian_ssn)
+                            *
+ERROR at line 12:
+ORA-00907: missing right parenthesis 
+
+
+SQL> --
 SQL> --
 SQL> CREATE TABLE BookCopy (
   2  copy_number     INTEGER,
@@ -65,8 +75,19 @@ SQL> CREATE TABLE BookCopy (
   5  date_received   DATE NOT NULL,
   6  tnumber INTEGER NOT NULL,
   7  --
-  8  CONSTRAINT bcIC1 PRIMARY KEY (copy_number, isbn)
-  9  );
+  8  CONSTRAINT bcIC1 PRIMARY KEY (copy_number, isbn),
+  9  --
+ 10  --Book Condition Constraint
+ 11  CONSTRAINT bcIC2 CHECK (condition IN ('New', 'Good', 'Bad')),
+ 12  --Newly Published Constraint, if bookcopy was received in the last year, must not have "bad" condition.
+ 13  CONSTRAINT bcIC3 CHECK (condition NOT IN ('Bad') OR (condition IN ('Bad') AND DATEDIFF(DATE_SUB(CURDATE(), INTERVAL 1 YEAR), date_received) > 365))
+ 14  );
+CONSTRAINT bcIC3 CHECK (condition NOT IN ('Bad') OR (condition IN ('Bad') AND DATEDIFF(DATE_SUB(CURDATE(), INTERVAL 1 YEAR), date_received) > 365))
+                                                               *
+ERROR at line 13:
+ORA-00907: missing right parenthesis 
+
+
 SQL> --
 SQL> CREATE TABLE Authors (
   2  a_isbn  INTEGER,
@@ -92,8 +113,7 @@ Commit complete.
 SQL> --
 SQL> --< One query (per table) of the form: SELECT * FROM table; in order to display your database >
 SQL> --
-SQL> < The SQL queries>
-SP2-0734: unknown command beginning "< The SQL ..." - rest of line ignored.
+SQL> --< The SQL queries>
 SQL> --Include the following for each query:
 SQL> --      − A comment line stating the query number and the feature(s) it demonstrates
 SQL> --(e.g. -- Q25 – correlated subquery).
@@ -128,15 +148,21 @@ SQL> INSERT INTO Transaction VALUES (7654321,
   3  	     TO_DATE('12/24/20', 'MM/DD/YY'),
   4  	     TO_DATE('12/24/20', 'MM/DD/YY'),
   5  	     0,123456789,54321);
+INSERT INTO Transaction VALUES (7654321,
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
 
-1 row created.
 
 SQL> --
 SQL> INSERT INTO BookCopy VALUES (10,1234567891234,'Good',
   2  	     TO_DATE('01/05/99', 'MM/DD/YY'),
   3  	     7654321);
+INSERT INTO BookCopy VALUES (10,1234567891234,'Good',
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
 
-1 row created.
 
 SQL> --
 SQL> INSERT INTO Authors VALUES (1234567891234, 'John Doe');
@@ -148,6 +174,124 @@ SQL> INSERT INTO Joins VALUES (4321, 54321,
   2  	     TO_DATE('01/07/00', 'MM/DD/YY'));
 
 1 row created.
+
+SQL> --
+SQL> --Next set
+SQL> INSERT INTO Book VALUES (9876543212022, 'Scholastic', 'The Hunger Games', 15.99);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Librarian VALUES (246710121, 'Leah',
+  2  	     TO_DATE('3/22/90', 'MM/DD/YY'),  101142222);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO LibraryCard VALUES (76543, 'Albert',
+  2  	     TO_DATE('06/30/20', 'MM/DD/YY'), 49221);
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO ReadingGroup VALUES (9876, 'True Crime Non-Fiction', 'Literary Detectives');
+INSERT INTO ReadingGroup VALUES (9876, 'True Crime Non-Fiction', 'Literary Detectives')
+                                       *
+ERROR at line 1:
+ORA-12899: value too large for column "WEBSTEA1"."READINGGROUP"."GENRE" 
+(actual: 22, maximum: 20) 
+
+
+SQL> --
+SQL> INSERT INTO Transaction VALUES (12345,
+  2  	     TO_DATE('02/02/22', 'MM/DD/YY'),
+  3  	     TO_DATE('02/16/22', 'MM/DD/YY'),
+  4  	     TO_DATE('02/15/22', 'MM/DD/YY'),
+  5  	     0,246710121,76543);
+INSERT INTO Transaction VALUES (12345,
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> --
+SQL> INSERT INTO BookCopy VALUES (1,9876543212022,'New',
+  2  	     TO_DATE('10/22/12', 'MM/DD/YY'),
+  3  	     12345);
+INSERT INTO BookCopy VALUES (1,9876543212022,'New',
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> --
+SQL> INSERT INTO Authors VALUES (9876543212022, 'Suzanne Collins');
+
+1 row created.
+
+SQL> --
+SQL> INSERT INTO Joins VALUES (9876, 76543,
+  2  	     TO_DATE('05/15/21', 'MM/DD/YY'));
+
+1 row created.
+
+SQL> --Next set
+SQL> INSERT INTO Book VALUES (9780316726610, 'Hyperion', 'The Five People You Meet in Heaven', 7.99);
+INSERT INTO Book VALUES (9780316726610, 'Hyperion', 'The Five People You Meet in Heaven', 7.99)
+                                                    *
+ERROR at line 1:
+ORA-12899: value too large for column "WEBSTEA1"."BOOK"."TITLE" (actual: 34, 
+maximum: 20) 
+
+
+SQL> INSERT INTO Librarian VALUES (748201099, 'Wean',
+  2  	     TO_DATE('11/19/18', 'MM/DD/YY'), 246710121);
+
+1 row created.
+
+SQL> INSERT INTO LibraryCard VALUES (76528, 'Sam',
+  2  	     TO_DATE('12/24/23' 'MM/DD/YY'), 49420);
+	TO_DATE('12/24/23' 'MM/DD/YY'), 49420)
+	                   *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> INSERT INTO ReadingGroup VALUES (1008, 'Religious fiction', 'Our philosophy');
+
+1 row created.
+
+SQL> INSERT INTO Transaction VALUES (12347,
+  2  	     TO_DATE('11/13/21', 'MM/DD/YY'),
+  3  	     TO_DATE('11/20/21', 'MM/DD/YY'),
+  4  	     TO_DATE('11/27/21', 'MM/DD/YY'),
+  5  	     0, 748201099, 76528);
+INSERT INTO Transaction VALUES (12347,
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO BookCopy VALUES (5, 9780316726610, 'Good',
+  2  	     TO_DATE('02/04/98', 'MM/DD/YY'),
+  3  	     12347);
+INSERT INTO BookCopy VALUES (5, 9780316726610, 'Good',
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO Authors VALUES (9876543212022, 'Mitch Albom');
+
+1 row created.
+
+SQL> INSERT INTO Joins VALUES (42356, 76528,,
+  2  	     TO_DATE('01/08/20', 'MM/DD/YY'));
+INSERT INTO Joins VALUES (42356, 76528,,
+                                       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
 
 SQL> COMMIT;
 

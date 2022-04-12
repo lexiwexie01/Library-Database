@@ -15,7 +15,7 @@ SET FEEDBACK OFF
 CREATE TABLE Book (
 ISBN	INTEGER,
 publisher   CHAR(20)	NOT NULL,
-title	CHAR(20)    NOT NULL,
+title	CHAR(40)    NOT NULL,
 retail_cost	FLOAT NOT NULL,
 --
 CONSTRAINT bookIC1 PRIMARY KEY (ISBN)
@@ -56,8 +56,11 @@ penalty	INTEGER,
 librarian_ssn	INTEGER NOT NULL,
 c_number	INTEGER NOT NULL,
 --
-CONSTRAINT tIC1 PRIMARY KEY (transaction_number)
+CONSTRAINT tIC1 PRIMARY KEY (transaction_number),
+--Fulfillment Constraint
+CONSTRAINT tIC2 FORIEGN KEY (librarian_ssn) REFERENCES Librarian(ssn)
 );
+--
 --
 CREATE TABLE BookCopy (
 copy_number	INTEGER,
@@ -68,7 +71,10 @@ tnumber	INTEGER NOT NULL,
 --
 CONSTRAINT bcIC1 PRIMARY KEY (copy_number, isbn),
 --
+--Book Condition Constraint
 CONSTRAINT bcIC2 CHECK (condition IN ('New', 'Good', 'Bad')),
+--Newly Published Constraint, if bookcopy was received in the last year, must not have "bad" condition.
+CONSTRAINT bcIC3 CHECK (condition NOT IN ('Bad') OR (condition IN ('Bad') AND DATEDIFF(DATE_SUB(CURDATE(), INTERVAL 1 YEAR), date_received) > 365))
 );
 --
 CREATE TABLE Authors (
@@ -142,7 +148,7 @@ INSERT INTO Transaction VALUES (12345,
 	TO_DATE('02/15/22', 'MM/DD/YY'),
 	0,246710121,76543);
 --
-INSERT INTO BookCopy VALUES (1,9876543212022,'Poor',
+INSERT INTO BookCopy VALUES (1,9876543212022,'New',
 	TO_DATE('10/22/12', 'MM/DD/YY'),
 	12345);
 --
@@ -155,7 +161,7 @@ INSERT INTO Book VALUES (9780316726610, 'Hyperion', 'The Five People You Meet in
 INSERT INTO Librarian VALUES (748201099, 'Wean', 
 	TO_DATE('11/19/18', 'MM/DD/YY'), 246710121);
 INSERT INTO LibraryCard VALUES (76528, 'Sam',
-	TO_DATE('12/24/23' 'MM/DD/YY'), 49420);
+	TO_DATE('12/24/23', 'MM/DD/YY'), 49420);
 INSERT INTO ReadingGroup VALUES (1008, 'Religious fiction', 'Our philosophy');
 INSERT INTO Transaction VALUES (12347,
 	TO_DATE('11/13/21', 'MM/DD/YY'), 
@@ -166,7 +172,7 @@ INSERT INTO BookCopy VALUES (5, 9780316726610, 'Good',
 	TO_DATE('02/04/98', 'MM/DD/YY'),
 	12347);
 INSERT INTO Authors VALUES (9876543212022, 'Mitch Albom');
-INSERT INTO Joins VALUES (42356, 76528,,
+INSERT INTO Joins VALUES (42356, 76528,
 	TO_DATE('01/08/20', 'MM/DD/YY'));
 COMMIT;
 /*Include the following items for every IC that you test (Important: see the next section titled
